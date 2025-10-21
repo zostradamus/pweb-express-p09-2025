@@ -4,7 +4,7 @@ import prisma from './config/prisma';
 
 import authRoutes from './routes/authRoutes';
 // import genreRoutes from './routes/genreRoutes';
-// import libraryRoutes from './routes/libraryRoutes';
+import libraryRoutes from './routes/libraryRoutes';
 // import transactionRoutes from './routes/transactionRoutes';
 
 dotenv.config();
@@ -24,7 +24,7 @@ app.get('/', (req: Request, res: Response) => {
 // Import routes
 app.use('/auth', authRoutes);
 // app.use('/genres', genreRoutes);
-// app.use('/libraries', libraryRoutes);
+app.use('/books', libraryRoutes);
 // app.use('/transactions', transactionRoutes);
 
 
