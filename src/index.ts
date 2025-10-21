@@ -2,7 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import prisma from './config/prisma';
 
-// import authRoutes from './routes/authRoutes';
+import authRoutes from './routes/authRoutes';
 // import genreRoutes from './routes/genreRoutes';
 // import libraryRoutes from './routes/libraryRoutes';
 // import transactionRoutes from './routes/transactionRoutes';
@@ -22,10 +22,10 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Import routes
-// app.use('/api/auth', authRoutes);
-// app.use('/api/genres', genreRoutes);
-// app.use('/api/libraries', libraryRoutes);
-// app.use('/api/transactions', transactionRoutes);
+app.use('/auth', authRoutes);
+// app.use('/genres', genreRoutes);
+// app.use('/libraries', libraryRoutes);
+// app.use('/transactions', transactionRoutes);
 
 
 app.use((req: Request, res: Response) => {
