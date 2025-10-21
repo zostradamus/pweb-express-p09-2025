@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id         String    @id @default(uuid())
+  username   String?
+  password   String
+  email      String    @unique
+  created_at DateTime
+  updated_at DateTime
+
+  orders     orders[]
+}
+
+model genres {
+  id         String    @id @default(uuid())
+  name       String    @unique
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime?
+
+  books      books[]
+}
+
+model books {
+  id               String     @id @default(uuid())
+  title            String     @unique
+  writer           String
+  publisher        String
+  publication_year Int
+  description      String?
+  price            Float
+  stock_quantity   Int
+  genre_id         String
+  created_at       DateTime
+  updated_at       DateTime
+  deleted_at       DateTime?
+
+  genre            genres     @relation(fields: [genre_id], references: [id])
+  order_items      order_items[]
+}
+
+model orders {
+  id         String       @id @default(uuid())
+  user_id    String
+  created_at DateTime
+  updated_at DateTime
+
+  user       users        @relation(fields: [user_id], references: [id])
+  order_items order_items[]
+}
+
+model order_items {
+  id         String    @id @default(uuid())
+  quantity   Int
+  order_id   String
+  book_id    String
+  created_at DateTime
+  updated_at DateTime
+
+  order      orders    @relation(fields: [order_id], references: [id])
+  book       books     @relation(fields: [book_id], references: [id])
+}

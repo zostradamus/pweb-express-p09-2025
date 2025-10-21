@@ -1,0 +1,1710 @@
+{
+	"info": {
+		"_postman_id": "0ecbe570-5503-46f2-b746-d4fd2afcb8bb",
+		"name": "Dokumentasi API Praktikum Pemrograman Web Modul 3",
+		"description": "### Desain Database\n\nDapat diakses pada [link berikut](https://dbdiagram.io/d/Modul-3-Desain-Database-67596b0b46c15ed47906d8ef).\n\n### Ketentuan API\n\n- Harus terdapat endpoint untuk melakukan _**health check**_ dengan _response data_ berupa **date**\n    \n- Terdapat enam modul untuk api yang akan dibuat dan **harus** dipisahkan dalam _route_ yang berbeda. Misalnya `/auth` untuk modul autentikasi, `/books` untuk modul buku, dan seterusnya.\n    \n\n### Ketentuan Response API\n\n``` json\n{\n    success: true | false // Boolean\n    message: \"\" // String\n    data: {} | [] | undefined\n}\n\n ```\n\n#### **Keterangan**:\n\n- **success**: sesuai dengan hasil eksekusi saat melakukan _request_ (_true_ apabila _request_ berhasil dan _false_ apabila _request_ gagal)\n    \n- **message**: pesan terkait kondisi status\n    \n- **data**: dapat berupa objek atau array",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32567284",
+		"_collection_link": "https://test-team-6586.postman.co/workspace/My-Workspace~a70256ca-d61a-4668-8cdb-91d266b4774c/collection/30283171-0ecbe570-5503-46f2-b746-d4fd2afcb8bb?action=share&source=collection_link&creator=32567284"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Mr. Dummy\", // Optional\r\n    \"email\": \"dummy@gmail.com\",\r\n    \"password\": \"Dummy.12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"Dummy 1\",\r\n    \"email\": \"dummy@gmail.com\",\r\n    \"password\": \"Dummy/123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"id\": \"7d25ce36-54af-448c-8a15-f487764c8d83\",\n        \"email\": \"dummy@gmail.com\",\n        \"created_at\": \"2025-07-20T00:24:16.113Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"dummy@gmail.com\",\r\n    \"password\": \"Dummy.12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"dummy@gmail.com\",\r\n    \"password\": \"Dummy/123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/login",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n    \"success\": true,\r\n    \"message\": \"Login successfully\",\r\n    \"data\": {\r\n        \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\"\r\n    }\r\n}"
+						},
+						{
+							"name": "Invalid Credentials",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"dummy@gmail.com\",\r\n    \"password\": \"Dummy/123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/login",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n    \"success\": false,\r\n    \"message\": \"Invalid credentials\"\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Current User (Me)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/auth/me",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/auth/me",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"me"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Get me successfully\",\n    \"data\": {\n        \"id\": \"7d25ce36-54af-448c-8a15-f487764c8d83\",\n        \"username\": \"Mr. Dummy\",\n        \"email\": \"dummy@gmail.com\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"description": "_Endpoint_ yang harus dibuat:\n\n- **POST** `/login` untuk masuk menggunakan kredensial yang telah didaftarkan\n    \n- **POST** `/register` untuk membuat _user_ baru\n    \n- **GET** `/me` untuk mendapatkan user yang telah login"
+		},
+		{
+			"name": "Genres",
+			"item": [
+				{
+					"name": "Create Genre",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Dummy Genre\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/genre",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"genre"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Dummy Genre\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/genre",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"genre"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Genre created successfully\",\n    \"data\": {\n        \"id\": \"7e7dfc47-f841-4294-ab9f-297696eb126a\",\n        \"name\": \"Dummy Genre\",\n        \"created_at\": \"2025-09-05T23:16:33.861Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Genre",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/genre?page=1&limit=10&search=dummy&orderByName=asc",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"genre"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "search",
+									"value": "dummy"
+								},
+								{
+									"key": "orderByName",
+									"value": "asc",
+									"description": "enum: asc, desc"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/genre?page=1&limit=15&search=dummy&orderByName=asc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"genre"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "15"
+										},
+										{
+											"key": "search",
+											"value": "dummy"
+										},
+										{
+											"key": "orderByName",
+											"value": "asc",
+											"description": "enum: asc, desc"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Get all genre successfully\",\n    \"data\": [\n        {\n            \"id\": \"766d3966-d294-4c09-89fe-fbf70320d4f1\",\n            \"name\": \"Dummy Genre 1\"\n        },\n        {\n            \"id\": \"46d0eafa-8f94-4214-84bf-362fe5bb081f\",\n            \"name\": \"Dummy Genre 2\"\n        },\n        {\n            \"id\": \"e23263ed-6fee-494a-8e91-75bea33553cc\",\n            \"name\": \"Dummy Genre 3\"\n        },\n        {\n            \"id\": \"781b5e27-ec8d-47c9-9f91-dbf11a3b9558\",\n            \"name\": \"Dummy Genre 4\"\n        },\n        {\n            \"id\": \"33d62243-e6b0-4ab3-9287-19e6b45359d3\",\n            \"name\": \"Dummy Genre 5\"\n        },\n        {\n            \"id\": \"ea7af298-4379-4e29-9e1f-434744b920f9\",\n            \"name\": \"Dummy Genre 6\"\n        },\n        {\n            \"id\": \"c34b1576-9613-4461-84e1-cbeea61df1db\",\n            \"name\": \"Dummy Genre 7\"\n        },\n        {\n            \"id\": \"2c63036c-aa6d-430a-bfff-c9604a4044c1\",\n            \"name\": \"Dummy Genre 8\"\n        },\n        {\n            \"id\": \"1bd2e6ce-1d7c-4613-a3ac-8a804d46112d\",\n            \"name\": \"Dummy Genre 9\"\n        },\n        {\n            \"id\": \"38af5ceb-755f-4ff6-9f08-856fbdd46406\",\n            \"name\": \"Dummy Genre 10\"\n        },\n        {\n            \"id\": \"634ce949-478a-4169-b642-798f2c0c6672\",\n            \"name\": \"Dummy Genre 11\"\n        },\n        {\n            \"id\": \"0c548e40-f1b1-4dc2-b275-8666dc9a856d\",\n            \"name\": \"Dummy Genre 12\"\n        },\n        {\n            \"id\": \"f7992b75-78ac-4261-a303-7503c02ba257\",\n            \"name\": \"Dummy Genre 13\"\n        },\n        {\n            \"id\": \"db8a653d-ed98-414f-8612-ca61b5bf7247\",\n            \"name\": \"Dummy Genre 14\"\n        },\n        {\n            \"id\": \"3d380e79-1a57-442a-b054-3a9104d36825\",\n            \"name\": \"Dummy Genre 15\"\n        }\n    ],\n    \"meta\": {\n        \"page\": 1,\n        \"limit\": 15,\n        \"prev_page\": null,\n        \"next_page\": 2\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Genre by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/genre/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"genre",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "38af5ceb-755f-4ff6-9f08-856fbdd46406"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/genre/:id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"genre",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "38af5ceb-755f-4ff6-9f08-856fbdd46406"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Get genre detail successfully\",\n    \"data\": {\n        \"id\": \"38af5ceb-755f-4ff6-9f08-856fbdd46406\",\n        \"name\": \"Dummy Genre 10\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Edit Genre",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Dummy Genre 10 Kocak\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/genre/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"genre",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "38af5ceb-755f-4ff6-9f08-856fbdd46406"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Dummy Genre 10 Kocak\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/genre/:id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"genre",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "38af5ceb-755f-4ff6-9f08-856fbdd46406"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Genre updated successfully\",\n    \"data\": {\n        \"id\": \"38af5ceb-755f-4ff6-9f08-856fbdd46406\",\n        \"name\": \"Dummy Genre 10 Kocak\",\n        \"updated_at\": \"2024-10-17T20:43:48.267Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Remove Genre",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/genre/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"genre",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "634ce949-478a-4169-b642-798f2c0c6672"
+								}
+							]
+						},
+						"description": "Perlu diingat bahwa _delete_ yang dimaksud disini adalah _**soft delete**_, dan dilakukan dengan memperbarui field _**deleted_at**_, bukan menghapus _entry_."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/genre/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"genre",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "9829593a-81f4-422b-80cc-e150ae368899"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n    \"success\": true,\r\n    \"message\": \"Genre removed successfully\"\r\n}"
+						}
+					]
+				}
+			],
+			"description": "**Harus menggunakan Bearer Token untuk dapat mengakses setiap endpoint yang ada dalam modul ini.**\n\n_Endpoint_ yang harus dibuat:\n\n- **POST** `/genre` untuk menambahkan genre baru\n    \n- **GET** `/genre` untuk mendapatkan daftar genre yang tersedia\n    \n- **GET** `/genre/:id` untuk mendapatkan detail dari sebuah genre\n    \n- **PATCH** `/genre/:id` untuk memperbarui data dari sebuah genre\n    \n- **DELETE** `/genre/:id` untuk menghapus data sebuah genre",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{BEARER_TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Add New Book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Dummy Book\",\r\n    \"writer\": \"Dummy Writer\",\r\n    \"publisher\": \"Dummy Publisher\",\r\n    \"description\": \"Dummy Description\", // Optional\r\n    \"publication_year\": 2025,\r\n    \"price\": 50000,\r\n    \"stock_quantity\": 50,\r\n    \"genre_id\": \"c34b1576-9613-4461-84e1-cbeea61df1db\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/books",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Dummy\",\r\n    \"writer\": \"Mr. Dummy\",\r\n    \"publisher\": \"PT. Dummy Legowo\",\r\n    \"isbn\": \"XYZ123456\", // Opsional\r\n    \"description\": \"Buku dummy keluaran tahun 2025\", // Opsional\r\n    \"publication_year\": 2025, // Opsional\r\n    \"condition\": \"NEW\", // Opsi: NEW, LIKE_NEW, VERY_GOOD, GOOD, ACCEPTABLE, POOR,\r\n    \"price\": 250000,\r\n    \"stock_quantity\": 50\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/books",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"books"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date",
+									"domain": "",
+									"path": ""
+								}
+							],
+							"body": "{\r\n    \"success\": true,\r\n    \"message\": \"Book added successfully\",\r\n    \"data\": {\r\n        \"id\": \"89161fbb-1ca5-48d6-a20d-933cc0d3e96f\",\r\n        \"title\": \"Dummy Book\",\r\n        \"created_at\": \"2024-12-15T23:20:14.791Z\"\r\n    }\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Books",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/books?page=1&limit=5&search=dummy&orderByTitle=desc&orderByPublishDate=asc",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "search",
+									"value": "dummy"
+								},
+								{
+									"key": "orderByTitle",
+									"value": "desc",
+									"description": "enum: asc, desc"
+								},
+								{
+									"key": "orderByPublishDate",
+									"value": "asc",
+									"description": "enum: asc, desc"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/books?page=1&limit=5&search=dummy&orderByTitle=desc&orderByPublishDate=asc&condition=NEW",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"books"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										},
+										{
+											"key": "search",
+											"value": "dummy"
+										},
+										{
+											"key": "orderByTitle",
+											"value": "desc",
+											"description": "enum: asc, desc"
+										},
+										{
+											"key": "orderByPublishDate",
+											"value": "asc",
+											"description": "enum: asc, desc"
+										},
+										{
+											"key": "condition",
+											"value": "NEW",
+											"description": "enum: NEW, LIKE_NEW, VERY_GOOD, GOOD, ACCEPTABLE, POOR"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date",
+									"domain": "",
+									"path": ""
+								}
+							],
+							"body": "{\r\n    \"success\": true,\r\n    \"message\": \"Get all book successfully\",\r\n    \"data\": [\r\n        {\r\n            \"id\": \"8dfb55aa-18e4-470a-8416-9b405db879b8\",\r\n            \"title\": \"Dummy Book 1\",\r\n            \"writer\": \"Dummy Writer 1\",\r\n            \"publisher\": \"Dummy Publisher 1\",\r\n            \"description\": \"Dummy Description 1\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50,\r\n            \"genre\": \"Dummy Genre 5\"\r\n        },\r\n        {\r\n            \"id\": \"974021dd-630a-4cbe-b5b4-560382873be1\",\r\n            \"title\": \"Dummy Book 2\",\r\n            \"writer\": \"Dummy Writer 2\",\r\n            \"publisher\": \"Dummy Publisher 2\",\r\n            \"description\": \"Dummy Description 2\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50,\r\n            \"genre\": \"Dummy Genre 3\"\r\n        },\r\n        {\r\n            \"id\": \"650ada3f-80fb-432a-a7d4-b1e2049f71fc\",\r\n            \"title\": \"Dummy Book 3\",\r\n            \"writer\": \"Dummy Writer 3\",\r\n            \"publisher\": \"Dummy Publisher 3\",\r\n            \"description\": \"Dummy Description 3\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50,\r\n            \"genre\": \"Dummy Genre 4\"\r\n        },\r\n        {\r\n            \"id\": \"6664cfda-aa6e-4a3d-8244-ef42e779f179\",\r\n            \"title\": \"Dummy Book 4\",\r\n            \"writer\": \"Dummy Writer 4\",\r\n            \"publisher\": \"Dummy Publisher 4\",\r\n            \"description\": \"Dummy Description 4\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50,\r\n            \"genre\": \"Dummy Genre 7\"\r\n        },\r\n        {\r\n            \"id\": \"923bf4d7-7c64-490e-b5ee-f752087fc492\",\r\n            \"title\": \"Dummy Book 5\",\r\n            \"writer\": \"Dummy Writer 5\",\r\n            \"publisher\": \"Dummy Publisher 5\",\r\n            \"description\": \"Dummy Description 5\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50,\r\n            \"genre\": \"Dummy Genre 2\"\r\n        }\r\n    ],\r\n    \"meta\": {\r\n        \"page\": 1,\r\n        \"limit\": 5,\r\n        \"prev_page\": null,\r\n        \"next_page\": 2\r\n    }\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Books by Genre",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/books/genre/:id?page=1&limit=5&search=dummy&orderByTitle=desc&orderByPublishDate=asc&condition=NEW",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books",
+								"genre",
+								":id"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "search",
+									"value": "dummy"
+								},
+								{
+									"key": "orderByTitle",
+									"value": "desc",
+									"description": "enum: asc, desc"
+								},
+								{
+									"key": "orderByPublishDate",
+									"value": "asc",
+									"description": "enum: asc, desc"
+								},
+								{
+									"key": "condition",
+									"value": "NEW",
+									"description": "enum: NEW, LIKE_NEW, VERY_GOOD, GOOD, ACCEPTABLE, POOR"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "0c548e40-f1b1-4dc2-b275-8666dc9a856d"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/books/genre/:id?page=1&limit=5&search=dummy&orderByTitle=desc&orderByPublishDate=asc&condition=NEW",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"books",
+										"genre",
+										":id"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										},
+										{
+											"key": "search",
+											"value": "dummy"
+										},
+										{
+											"key": "orderByTitle",
+											"value": "desc",
+											"description": "enum: asc, desc"
+										},
+										{
+											"key": "orderByPublishDate",
+											"value": "asc",
+											"description": "enum: asc, desc"
+										},
+										{
+											"key": "condition",
+											"value": "NEW",
+											"description": "enum: NEW, LIKE_NEW, VERY_GOOD, GOOD, ACCEPTABLE, POOR"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "0c548e40-f1b1-4dc2-b275-8666dc9a856d"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date",
+									"domain": "",
+									"path": ""
+								}
+							],
+							"body": "{\r\n    \"success\": true,\r\n    \"message\": \"Get all book by genre successfully\",\r\n    \"data\": [\r\n        {\r\n            \"id\": \"2253d5bb-4c4c-4cf7-a2b9-4a5888e5f4d5\",\r\n            \"title\": \"Dummy Book 13\",\r\n            \"writer\": \"Dummy Writer 13\",\r\n            \"publisher\": \"Dummy Publisher 13\",\r\n            \"description\": \"Dummy Description 13\",\r\n            \"genre\": \"Dummy Genre 2\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50\r\n        },\r\n        {\r\n            \"id\": \"ce0a5b15-9481-4416-9415-23b1d09bea4b\",\r\n            \"title\": \"Dummy Book 15\",\r\n            \"writer\": \"Dummy Writer 15\",\r\n            \"publisher\": \"Dummy Publisher 15\",\r\n            \"description\": \"Dummy Description 15\",\r\n            \"genre\": \"Dummy Genre 2\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50\r\n        },\r\n        {\r\n            \"id\": \"1a1399c1-5c76-4ce3-b3d9-b824a47a3832\",\r\n            \"title\": \"Dummy Book 18\",\r\n            \"writer\": \"Dummy Writer 18\",\r\n            \"publisher\": \"Dummy Publisher 18\",\r\n            \"description\": \"Dummy Description 18\",\r\n            \"genre\": \"Dummy Genre 2\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50\r\n        },\r\n        {\r\n            \"id\": \"1e9aed46-63fa-4c29-9dec-f46fd1192a52\",\r\n            \"title\": \"Dummy Book 14\",\r\n            \"writer\": \"Dummy Writer 14\",\r\n            \"publisher\": \"Dummy Publisher 14\",\r\n            \"description\": \"Dummy Description 14\",\r\n            \"genre\": \"Dummy Genre 2\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50\r\n        },\r\n        {\r\n            \"id\": \"f37224b3-43c9-41e2-a7c2-9364f1a23b68\",\r\n            \"title\": \"Dummy Book 17\",\r\n            \"writer\": \"Dummy Writer 17\",\r\n            \"publisher\": \"Dummy Publisher 17\",\r\n            \"description\": \"Dummy Description 17\",\r\n            \"genre\": \"Dummy Genre 2\",\r\n            \"publication_year\": 2025,\r\n            \"price\": 50000,\r\n            \"stock_quantity\": 50\r\n        }\r\n    ],\r\n     \"meta\": {\r\n        \"page\": 1,\r\n        \"limit\": 5,\r\n        \"prev_page\": null,\r\n        \"next_page\": 2\r\n    }\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Book by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/books/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "923bf4d7-7c64-490e-b5ee-f752087fc492"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/books/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "923bf4d7-7c64-490e-b5ee-f752087fc492"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date",
+									"domain": "",
+									"path": ""
+								}
+							],
+							"body": "{\r\n    \"success\": true,\r\n    \"message\": \"Get book detail successfully\",\r\n    \"data\": {\r\n        \"id\": \"923bf4d7-7c64-490e-b5ee-f752087fc492\",\r\n        \"title\": \"Dummy Book 5\",\r\n        \"writer\": \"Dummy Writer 5\",\r\n        \"publisher\": \"Dummy Publisher 5\",\r\n        \"description\": \"Dummy Description 5\",\r\n        \"publication_year\": 2025,\r\n        \"price\": 50000,\r\n        \"stock_quantity\": 50,\r\n        \"genre\": \"Dummy Genre 2\"\r\n    }\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Edit Book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"Dummy Description\",\r\n    \"price\": 50000\r\n    // \"stock_quantity\": 50,\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/books/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6664cfda-aa6e-4a3d-8244-ef42e779f179"
+								}
+							]
+						},
+						"description": "Dalam _case_ ini, _user_ hanya dapat mengedit _**description, price**_**, dan** _**stock_quantity**_."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"description\": \"Dummy Description\",\r\n    \"price\": 50000\r\n    // \"stock_quantity\": 50,\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/books/:id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "6664cfda-aa6e-4a3d-8244-ef42e779f179"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Book updated successfully\",\n    \"data\": {\n        \"id\": \"6664cfda-aa6e-4a3d-8244-ef42e779f179\",\n        \"title\": \"Dummy Book\",\n        \"updated_at\": \"2024-10-17T20:43:48.267Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Remove Book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/books/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "650ada3f-80fb-432a-a7d4-b1e2049f71fc"
+								}
+							]
+						},
+						"description": "Perlu diingat bahwa _delete_ yang dimaksud disini adalah _**soft delete**_, dan dilakukan dengan memperbarui field _**deleted_at**_, bukan menghapus _entry_."
+					},
+					"response": [
+						{
+							"name": "Remove Book",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/books/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "e162433f-0262-4d6d-92d6-b8c74576c091"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Invalid Date",
+									"domain": "",
+									"path": ""
+								}
+							],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Book removed successfully\"\n}"
+						}
+					]
+				}
+			],
+			"description": "**Harus menggunakan Bearer Token untuk dapat mengakses setiap endpoint yang ada dalam modul ini.**\n\n_Endpoint_ yang harus dibuat:\n\n- **POST** `/books` untuk menambahkan buku baru\n    \n- **GET** `/books` untuk mendapatkan daftar buku yang tersedia\n    \n- **GET** `/books/:id` untuk mendapatkan detail dari sebuah buku\n    \n- **GET** `/books/genre/:id` untuk mendapatkan daftar buku berdasarkan genre\n    \n- **PATCH** `/books/:id` untuk memperbarui data dari sebuah buku\n    \n- **DELETE** `/books/:id` untuk menghapus data sebuah buku",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{BEARER_TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Create Transaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": \"7d25ce36-54af-448c-8a15-f487764c8d83\",\r\n    \"items\": [\r\n        {\r\n            \"book_id\": \"2253d5bb-4c4c-4cf7-a2b9-4a5888e5f4d5\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"book_id\": \"8dfb55aa-18e4-470a-8416-9b405db879b8\",\r\n            \"quantity\": 3\r\n        },\r\n        {\r\n            \"book_id\": \"1a1399c1-5c76-4ce3-b3d9-b824a47a3832\",\r\n            \"quantity\": 5\r\n        },\r\n        {\r\n            \"book_id\": \"923bf4d7-7c64-490e-b5ee-f752087fc492\",\r\n            \"quantity\": 7\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/transactions",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"transactions"
+							]
+						},
+						"description": "Dalam _case_, tetap gunakan struktur _**array**_ meskipun _user_ hanya ingin membuat transaksi untuk satu buku saja."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": \"7d25ce36-54af-448c-8a15-f487764c8d83\",\r\n    \"transactions\": [\r\n        {\r\n            \"book_id\": \"2253d5bb-4c4c-4cf7-a2b9-4a5888e5f4d5\",\r\n            \"quantity\": 10\r\n        },\r\n        {\r\n            \"book_id\": \"8dfb55aa-18e4-470a-8416-9b405db879b8\",\r\n            \"quantity\": 3\r\n        },\r\n        {\r\n            \"book_id\": \"1a1399c1-5c76-4ce3-b3d9-b824a47a3832\",\r\n            \"quantity\": 5\r\n        },\r\n        {\r\n            \"book_id\": \"923bf4d7-7c64-490e-b5ee-f752087fc492\",\r\n            \"quantity\": 7\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/transactions",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"transactions"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n    \"success\": true,\r\n    \"message\": \"Transaction created successfully\",\r\n    \"data\": {\r\n        \"transaction_id\": \"c3353007-bbb7-47d0-83f7-7665ca7c8699\",\r\n        \"total_quantity\": 25,\r\n        \"total_price\": 999000\r\n    }\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Transaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/transactions?page=1&limit=5&search=dummy&orderById=desc&orderByAmount=asc",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "search",
+									"value": "dummy",
+									"description": "id search"
+								},
+								{
+									"key": "orderById",
+									"value": "desc",
+									"description": "enum: asc, desc"
+								},
+								{
+									"key": "orderByAmount",
+									"value": "asc",
+									"description": "enum: asc, desc"
+								},
+								{
+									"key": "orderByPrice",
+									"value": "asc",
+									"description": "enum: asc, desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/transactions?page=1&limit=5&search=dummy&orderById=desc&orderByAmount=asc",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										},
+										{
+											"key": "search",
+											"value": "dummy",
+											"description": "id search"
+										},
+										{
+											"key": "orderById",
+											"value": "desc",
+											"description": "enum: asc, desc"
+										},
+										{
+											"key": "orderByAmount",
+											"value": "asc",
+											"description": "enum: asc, desc"
+										},
+										{
+											"key": "orderByPrice",
+											"value": "asc",
+											"description": "enum: asc, desc",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n    \"success\": true,\r\n    \"message\": \"Get all transaction successfully\",\r\n    \"data\": [\r\n        {\r\n            \"id\": \"e4f8d1c9-5a0b-4e72-a3f7-9c8b6d2a4e1f\",\r\n            \"total_quantity\": 15,\r\n            \"total_price\": 45000\r\n        },\r\n        {\r\n            \"id\": \"0c9d8e7b-6a5f-4d32-8b1a-2c3d4e5f6a7b\",\r\n            \"total_quantity\": 20,\r\n            \"total_price\": 50000\r\n        },\r\n        {\r\n            \"id\": \"7b6a5d4e-3f2c-4109-8765-43210fedcba9\",\r\n            \"total_quantity\": 5,\r\n            \"total_price\": 15000\r\n        },\r\n        {\r\n            \"id\": \"3d4e5f6a-7b8c-4901-2345-67890fedcba9\",\r\n            \"total_quantity\": 25,\r\n            \"total_price\": 55000\r\n        },\r\n        {\r\n            \"id\": \"9a8b7c6d-5e4f-4123-4567-890fedcba987\",\r\n            \"total_quantity\": 10,\r\n            \"total_price\": 10000\r\n        }\r\n    ]\r\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Transaction by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/transactions/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"transactions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "e4f8d1c9-5a0b-4e72-a3f7-9c8b6d2a4e1f"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/transactions/:id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"transactions",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "e4f8d1c9-5a0b-4e72-a3f7-9c8b6d2a4e1f"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Get transaction detail successfully\",\n    \"data\": {\n        \"id\": \"e4f8d1c9-5a0b-4e72-a3f7-9c8b6d2a4e1f\",\n        \"items\": [\n            {\n                \"book_id\": \"b3e0a5f6-7d1c-4b88-9e52-1f4a3c6d9b0e\",\n                \"book_title\": \"Dummy Book 7\",\n                \"quantity\": 5,\n                \"subtotal_price\": 15000\n            },\n            {\n                \"book_id\": \"a1c2b3d4-e5f6-4789-8012-34567890abcd\",\n                \"book_title\": \"Dummy Book 2\",\n                \"quantity\": 5,\n                \"subtotal_price\": 15000\n            },\n            {\n                \"book_id\": \"8c7b6a5d-4e3f-4210-9876-543210fedcba\",\n                \"book_title\": \"Dummy Book 9\",\n                \"quantity\": 5,\n                \"subtotal_price\": 15000\n            }\n        ],\n        \"total_quantity\": 15,\n        \"total_price\": 45000\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Transaction Statistics",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{BEARER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/transactions",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/transactions",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"transactions"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Get transactions statistics successfully\",\n    \"data\": {\n        \"total_transactions\": 1000,\n        \"average_transaction_amount\": 50000,\n        \"fewest_book_sales_genre\": \"Science Fiction\",\n        \"most_book_sales_genre\": \"Fantasy\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"description": "**Harus menggunakan Bearer Token untuk dapat mengakses setiap endpoint yang ada dalam modul ini.**\n\n_Endpoint_ yang harus dibuat:\n\n- **POST** `/transactions` untuk membuat transaksi baru\n    \n- **GET** `/transactions` untuk mendapatkan daftar transaksi yang tersedia\n    \n- **GET** `/transactions/:id` untuk mendapatkan detail dari sebuah transaksi\n    \n- **GET** `/transactions/statistics` untuk mendapatkan statistik transaksi",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{BEARER_TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/health-check",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"health-check"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Hello World!\",\n    \"date\": \"Thu Nov 07 2024\"\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "BEARER_TOKEN",
+			"value": ""
+		}
+	]
+}
