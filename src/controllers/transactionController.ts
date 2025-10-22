@@ -6,6 +6,14 @@ const prisma = new PrismaClient();
 
 export const createTransaction = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+
     const { user_id, items } = req.body;
 
     if (!user_id || !Array.isArray(items) || items.length === 0) {
@@ -75,6 +83,14 @@ export const createTransaction = async (req: Request, res: Response) => {
 
 export const getAllTransactions = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+
     // Ambil query param
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
@@ -138,6 +154,14 @@ export const getAllTransactions = async (req: Request, res: Response) => {
 
 export const getTransactionById = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+
     const { id } = req.params;
 
     // Validasi input
@@ -190,6 +214,14 @@ export const getTransactionById = async (req: Request, res: Response) => {
 // // GET statistik transaksi
 export const getTransactionStats = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+    
     // Ambil semua transaksi lengkap dengan item dan buku + genre
     const transactions = await prisma.orders.findMany({
       include: {

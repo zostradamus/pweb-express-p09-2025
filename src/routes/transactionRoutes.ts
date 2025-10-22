@@ -3,7 +3,7 @@ import {createTransaction, getAllTransactions, getTransactionById, getTransactio
 
 const router = express.Router();
 router.post("/", createTransaction);
-router.get("/stats", getTransactionStats);  // 🔹 harus sebelum /:id
+router.get("/statistics", getTransactionStats);  // 🔹 harus sebelum /:id
 router.get("/:id", getTransactionById);     // 🔹 route dinamis di bawah
 router.get("/", getAllTransactions);        // 🔹 route default di paling bawah
 export default router;

@@ -8,6 +8,14 @@ const prisma = new PrismaClient();
 // ====== CREATE (auto-restore jika soft-deleted) ======
 export const createBook = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+
     const {
       title,
       writer,
@@ -156,6 +164,14 @@ export const createBook = async (req: Request, res: Response) => {
 // ====== GET ALL (filter + pagination + sorting) ======
 export const getAllBooks = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+
     const {
       page = "1",
       limit = "10",
@@ -254,6 +270,14 @@ export const getAllBooks = async (req: Request, res: Response) => {
 // ====== GET DETAIL ======
 export const getBookDetail = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+
     const { book_id } = req.params;
 
     const book = await prisma.books.findFirst({
@@ -277,6 +301,14 @@ export const getBookDetail = async (req: Request, res: Response) => {
 // ====== GET BY GENRE (filter + pagination) ======
 export const getBooksByGenre = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+
     const { genre_id } = req.params;
     const { page = "1", limit = "10", search } = req.query as Record<string, string>;
 
@@ -334,6 +366,14 @@ export const getBooksByGenre = async (req: Request, res: Response) => {
 // ====== UPDATE (PATCH) ======
 export const updateBook = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+
     const { book_id } = req.params;
     const {
       title,
@@ -414,6 +454,14 @@ export const updateBook = async (req: Request, res: Response) => {
 // ====== DELETE (soft delete + blokir jika sudah ada transaksi) ======
 export const deleteBook = async (req: Request, res: Response) => {
   try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "Token tidak ditemukan.",
+      });
+    }
+    
     const { book_id } = req.params;
 
     const book = await prisma.books.findFirst({
