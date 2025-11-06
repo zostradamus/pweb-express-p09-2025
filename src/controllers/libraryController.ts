@@ -181,32 +181,21 @@ export const getAllBooks = async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res.status(401).json({
-        success: false,
-        message: "Token tidak ditemukan.",
-      });
+      return res.status(401).json({ success: false, message: "Token tidak ditemukan." });
     }
 
     const {
       page = "1",
       limit = "10",
-      search,                 // cari di title / writer / publisher
-      minPrice,
-      maxPrice,
-      year,                   // publication_year
-      sortBy = "created_at",  // created_at | title | price | publication_year | stock_quantity
-      sortOrder = "desc",     // asc | desc
+      search,
+      orderByTitle = "",
+      orderByPublishDate = "",
     } = req.query as Record<string, string>;
 
     const pageNum = Math.max(1, Number(page));
     const limitNum = Math.max(1, Number(limit));
     const skip = (pageNum - 1) * limitNum;
 
-    const yearNum = year ? Number(year) : undefined;
-    const minPriceNum = minPrice ? Number(minPrice) : undefined;
-    const maxPriceNum = maxPrice ? Number(maxPrice) : undefined;
-
-    // where diketik pakai Prisma supaya aman
     const where: Prisma.booksWhereInput = {
       deleted_at: null,
       ...(search
@@ -218,44 +207,20 @@ export const getAllBooks = async (req: Request, res: Response) => {
             ],
           }
         : {}),
-      ...(yearNum !== undefined ? { publication_year: yearNum } : {}),
-      ...(minPriceNum !== undefined || maxPriceNum !== undefined
-        ? {
-            price: {
-              ...(minPriceNum !== undefined ? { gte: minPriceNum } : {}),
-              ...(maxPriceNum !== undefined ? { lte: maxPriceNum } : {}),
-            },
-          }
-        : {}),
     };
 
-    const validSortFields = new Set<keyof Prisma.booksOrderByWithRelationInput>([
-      "created_at",
-      "title",
-      "price",
-      "publication_year",
-      "stock_quantity",
-    ]);
-
-    // default orderBy
-    let orderBy: Prisma.booksOrderByWithRelationInput = { created_at: "desc" };
-
-    if (validSortFields.has(sortBy as any)) {
-      orderBy = {
-        [sortBy]: (sortOrder === "asc" ? "asc" : "desc"),
-      } as Prisma.booksOrderByWithRelationInput;
-    }
-
-    const [total, items] = await Promise.all([
+    const [total, books] = await Promise.all([
       prisma.books.count({ where }),
       prisma.books.findMany({
         where,
-        orderBy,
         skip,
         take: limitNum,
-        include: {
-          genre: { select: { id: true, name: true } },
-        },
+        include: { genre: { select: { id: true, name: true } } },
+        orderBy: orderByTitle
+          ? { title: orderByTitle as "asc" | "desc" }
+          : orderByPublishDate
+          ? { publication_year: orderByPublishDate as "asc" | "desc" }
+          : { created_at: "desc" },
       }),
     ]);
 
@@ -263,7 +228,7 @@ export const getAllBooks = async (req: Request, res: Response) => {
       success: true,
       message: "Daftar buku berhasil diambil.",
       data: {
-        items,
+        items: books,
         pagination: {
           page: pageNum,
           limit: limitNum,
@@ -274,10 +239,7 @@ export const getAllBooks = async (req: Request, res: Response) => {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({
-      success: false,
-      message: "Terjadi kesalahan server.",
-    });
+    return res.status(500).json({ success: false, message: "Terjadi kesalahan server." });
   }
 };
 
@@ -318,14 +280,12 @@ export const getBooksByGenre = async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res.status(401).json({
-        success: false,
-        message: "Token tidak ditemukan.",
-      });
+      return res.status(401).json({ success: false, message: "Token tidak ditemukan." });
     }
 
     const { genre_id } = req.params;
-    const { page = "1", limit = "10", search } = req.query as Record<string, string>;
+    const { page = "1", limit = "10", search, orderByTitle = "", orderByPublishDate = "" } =
+      req.query as Record<string, string>;
 
     const pageNum = Math.max(1, Number(page));
     const limitNum = Math.max(1, Number(limit));
@@ -336,26 +296,32 @@ export const getBooksByGenre = async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, message: "Genre tidak ditemukan." });
     }
 
-    const where: any = {
+    const where: Prisma.booksWhereInput = {
       deleted_at: null,
       genre_id,
-      ...(search && {
-        OR: [
-          { title: { contains: search, mode: "insensitive" } },
-          { writer: { contains: search, mode: "insensitive" } },
-          { publisher: { contains: search, mode: "insensitive" } },
-        ],
-      }),
+      ...(search
+        ? {
+            OR: [
+              { title: { contains: search, mode: "insensitive" } },
+              { writer: { contains: search, mode: "insensitive" } },
+              { publisher: { contains: search, mode: "insensitive" } },
+            ],
+          }
+        : {}),
     };
 
-    const [total, items] = await Promise.all([
+    const [total, books] = await Promise.all([
       prisma.books.count({ where }),
       prisma.books.findMany({
         where,
         skip,
         take: limitNum,
-        orderBy: { created_at: "desc" },
         include: { genre: { select: { id: true, name: true } } },
+        orderBy: orderByTitle
+          ? { title: orderByTitle as "asc" | "desc" }
+          : orderByPublishDate
+          ? { publication_year: orderByPublishDate as "asc" | "desc" }
+          : { created_at: "desc" },
       }),
     ]);
 
@@ -363,7 +329,7 @@ export const getBooksByGenre = async (req: Request, res: Response) => {
       success: true,
       message: "Daftar buku per genre berhasil diambil.",
       data: {
-        items,
+        items: books,
         pagination: {
           page: pageNum,
           limit: limitNum,
