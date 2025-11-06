@@ -57,6 +57,21 @@ export const createBook = async (req: Request, res: Response) => {
       });
     }
 
+    // 🔹 Validasi harga dan stok tidak boleh minus & stok harus bilangan bulat
+if (bookPrice < 0) {
+  return res.status(400).json({
+    success: false,
+    message: "price tidak boleh bernilai negatif.",
+  });
+}
+
+if (stockQty < 0 || !Number.isInteger(stockQty)) {
+  return res.status(400).json({
+    success: false,
+    message: "stock_quantity harus bilangan bulat dan tidak boleh negatif.",
+  });
+}
+
     // 🔹 Validasi tahun
     const thisYear = new Date().getFullYear();
     if (pubYear < 0 || pubYear > thisYear + 1) {
@@ -410,20 +425,32 @@ export const updateBook = async (req: Request, res: Response) => {
     }
 
     if (price !== undefined) {
-      const bookPrice = Number(price);
-      if (Number.isNaN(bookPrice)) {
-        return res.status(400).json({ success: false, message: "price harus number." });
-      }
-      data.price = bookPrice;
-    }
+  const bookPrice = Number(price);
+  if (Number.isNaN(bookPrice)) {
+    return res.status(400).json({ success: false, message: "price harus number." });
+  }
+  if (bookPrice < 0) {
+    return res.status(400).json({
+      success: false,
+      message: "price tidak boleh negatif.",
+    });
+  }
+  data.price = bookPrice;
+}
 
     if (stock_quantity !== undefined) {
-      const stockQty = Number(stock_quantity);
-      if (Number.isNaN(stockQty)) {
-        return res.status(400).json({ success: false, message: "stock_quantity harus number." });
-      }
-      data.stock_quantity = stockQty;
-    }
+  const stockQty = Number(stock_quantity);
+  if (Number.isNaN(stockQty)) {
+    return res.status(400).json({ success: false, message: "stock_quantity harus number." });
+  }
+  if (stockQty < 0 || !Number.isInteger(stockQty)) {
+    return res.status(400).json({
+      success: false,
+      message: "stock_quantity harus bilangan bulat dan tidak boleh negatif.",
+    });
+  }
+  data.stock_quantity = stockQty;
+}
 
     if (genre_id !== undefined) {
       const g = await prisma.genres.findUnique({ where: { id: genre_id } });
