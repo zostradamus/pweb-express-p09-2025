@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import prisma from './config/prisma';
+import cors from 'cors';
 
 import authRoutes from './routes/authRoutes';
 import genreRoutes from './routes/genreRoutes';
@@ -20,6 +21,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(authenticateUser);
 
+app.use(cors({
+  origin: "http://localhost:5173", // asal frontend
+  credentials: true               // jika pakai cookie / session
+}));
+
 // Test route
 app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Express + Prisma + PostgreSQL' });
@@ -34,6 +40,8 @@ app.use('/transactions', transactionRoutes);
 app.use((req: Request, res: Response) => {
   res.status(404).json({ error: 'Endpoint tidak ditemukan' });
 });
+
+
 
 
 // Start server
