@@ -94,13 +94,14 @@ export const getAllTransactions = async (req: Request, res: Response) => {
     // Ambil query param
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
-    const search = (req.query.search as string) || ""; // search by username
+    const search = (req.query.search as string) || "";
     const orderById = (req.query.orderById as "asc" | "desc") || "asc";
-    const orderByAmount = (req.query.orderByAmount as "asc" | "desc") || "asc";
+    const orderByAmount = (req.query.orderByAmount as "asc" | "desc") || "";
+    const orderByPrice = (req.query.orderByPrice as "asc" | "desc") || "";
 
     const skip = (page - 1) * limit;
 
-    // Ambil data dengan filter search dan sorting
+    // Ambil data dari database
     const transactions = await prisma.orders.findMany({
       skip,
       take: limit,
@@ -113,37 +114,51 @@ export const getAllTransactions = async (req: Request, res: Response) => {
         },
       },
       include: {
-        user: {
-          select: { id: true, username: true, email: true },
-        },
+        user: { select: { id: true, username: true, email: true } },
         order_items: {
           include: {
             book: { select: { id: true, title: true, price: true } },
           },
         },
       },
-      orderBy: [
-        { id: orderById },
-        // sorting by total amount per transaction requires mapping later
-      ],
+      orderBy: [{ id: orderById }],
     });
 
-    // Kalau mau sorting by total amount:
+    // Hitung total amount & avg price per transaksi
+    const transactionsWithTotals = transactions.map((t) => {
+      const totalAmount = t.order_items.reduce(
+        (sum, item) => sum + item.quantity * item.book.price,
+        0
+      );
+      const avgPrice =
+        t.order_items.length > 0
+          ? t.order_items.reduce((sum, item) => sum + item.book.price, 0) /
+            t.order_items.length
+          : 0;
+
+      return { ...t, totalAmount, avgPrice };
+    });
+
+    // Sorting manual berdasarkan amount / price
     if (orderByAmount) {
-      transactions.sort((a, b) => {
-        const totalA = a.order_items.reduce((sum, item) => sum + item.quantity * item.book.price, 0);
-        const totalB = b.order_items.reduce((sum, item) => sum + item.quantity * item.book.price, 0);
-        return orderByAmount === "asc" ? totalA - totalB : totalB - totalA;
-      });
+      transactionsWithTotals.sort((a, b) =>
+        orderByAmount === "asc"
+          ? a.totalAmount - b.totalAmount
+          : b.totalAmount - a.totalAmount
+      );
+    } else if (orderByPrice) {
+      transactionsWithTotals.sort((a, b) =>
+        orderByPrice === "asc" ? a.avgPrice - b.avgPrice : b.avgPrice - a.avgPrice
+      );
     }
 
     return res.status(200).json({
       success: true,
       message: "All transactions retrieved successfully",
-      data: transactions,
+      data: transactionsWithTotals,
     });
   } catch (error: any) {
-    console.error(error);
+    console.error("ERROR:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",

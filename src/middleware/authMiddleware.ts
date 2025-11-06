@@ -10,9 +10,10 @@ export const authenticateUser = (
   next: NextFunction
 ) => {
   // Bypass route auth
-  if (req.path.startsWith("/auth")) {
-    return next();
-  }
+  const url = req.originalUrl;
+if (url.startsWith("/auth") || url.startsWith("/health")) {
+  return next();
+}
 
   // Ambil token dari header Authorization
   const authHeader = req.headers.authorization;

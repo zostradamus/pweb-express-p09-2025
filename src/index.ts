@@ -3,10 +3,13 @@ import dotenv from 'dotenv';
 import prisma from './config/prisma';
 import cors from 'cors';
 
+
 import authRoutes from './routes/authRoutes';
 import genreRoutes from './routes/genreRoutes';
 import libraryRoutes from './routes/libraryRoutes';
 import transactionRoutes from './routes/transactionRoutes';
+import healthcheckRoutes from "./routes/healthcheckRoutes";
+
 
 import { authenticateUser } from "./middleware/authMiddleware";
 
@@ -19,6 +22,9 @@ const PORT = process.env.PORT || 8080;
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+
 app.use(authenticateUser);
 
 app.use(cors({
@@ -31,10 +37,13 @@ app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Express + Prisma + PostgreSQL' });
 });
 
+app.use("/health", healthcheckRoutes);
 app.use('/auth', authRoutes);
 app.use('/genre', genreRoutes);
 app.use('/books', libraryRoutes);
 app.use('/transactions', transactionRoutes);
+app.use("/health-check", healthcheckRoutes);
+
 
 
 app.use((req: Request, res: Response) => {
