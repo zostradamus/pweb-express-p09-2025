@@ -17,6 +17,7 @@ if (url.startsWith("/auth") || url.startsWith("/health")) {
 
   // Ambil token dari header Authorization
   const authHeader = req.headers.authorization;
+  console.log("Authorization Header:", authHeader);
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({
@@ -28,6 +29,10 @@ if (url.startsWith("/auth") || url.startsWith("/health")) {
   const token = authHeader.split(" ")[1];
 
   try {
+    console.log("Authorization Header:", authHeader);
+    console.log("JWT_SECRET:", JWT_SECRET);
+    console.log("Token yang akan diverifikasi:", token);
+
     const decoded = jwt.verify(token, JWT_SECRET) as any;
     (req as any).user = decoded; // simpan info user ke request
     next();

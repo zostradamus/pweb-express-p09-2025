@@ -29,31 +29,21 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/health", healthcheckRoutes);
+app.use('/auth', authRoutes);
 
-
-app.use(authenticateUser);
-
+app.use("/genre", authenticateUser, genreRoutes);
+app.use("/books", authenticateUser, libraryRoutes);
+app.use("/transactions", authenticateUser, transactionRoutes);
 
 // Test route
 app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Express + Prisma + PostgreSQL' });
 });
 
-app.use("/health", healthcheckRoutes);
-app.use('/auth', authRoutes);
-app.use('/genre', genreRoutes);
-app.use('/books', libraryRoutes);
-app.use('/transactions', transactionRoutes);
-app.use("/health-check", healthcheckRoutes);
-
-
-
 app.use((req: Request, res: Response) => {
   res.status(404).json({ error: 'Endpoint tidak ditemukan' });
 });
-
-
-
 
 // Start server
 app.listen(PORT, () => {

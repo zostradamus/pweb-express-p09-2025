@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 
 const prisma = new PrismaClient();
 
@@ -16,6 +16,7 @@ export const createTransaction = async (req: Request, res: Response) => {
 
     const { user_id, items } = req.body;
 
+    // Validasi dasar
     if (!user_id || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
@@ -32,14 +33,38 @@ export const createTransaction = async (req: Request, res: Response) => {
       }
     }
 
-    // buat id order unik dengan bcrypt
-    const baseId = `${user_id}-${Date.now()}`;
-    const hashedId = await bcrypt.hash(baseId, 10);
+    // ✅ Pastikan user valid
+    const userExists = await prisma.users.findUnique({
+      where: { id: user_id },
+    });
+
+    if (!userExists) {
+      return res.status(404).json({
+        success: false,
+        message: "User tidak ditemukan. Pastikan user_id valid.",
+      });
+    }
+
+    // ✅ (Opsional tapi disarankan) Pastikan semua book_id valid
+    for (const item of items) {
+      const bookExists = await prisma.books.findUnique({
+        where: { id: item.book_id },
+      });
+      if (!bookExists) {
+        return res.status(404).json({
+          success: false,
+          message: `Buku dengan id ${item.book_id} tidak ditemukan.`,
+        });
+      }
+    }
+
+    // ✅ Buat id order dengan UUID (aman & sesuai schema)
+    const orderId = uuidv4();
 
     // Simpan ke tabel orders
     const order = await prisma.orders.create({
       data: {
-        id: hashedId,
+        id: orderId,
         user_id,
         created_at: new Date(),
         updated_at: new Date(),
@@ -61,8 +86,6 @@ export const createTransaction = async (req: Request, res: Response) => {
       )
     );
 
-    
-
     return res.status(201).json({
       success: true,
       message: "Transaction (order) created successfully",
@@ -72,7 +95,7 @@ export const createTransaction = async (req: Request, res: Response) => {
       },
     });
   } catch (error: any) {
-    console.error("ERROR:",error);
+    console.error("ERROR:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -106,23 +129,34 @@ export const getAllTransactions = async (req: Request, res: Response) => {
       skip,
       take: limit,
       where: {
-        user: {
-          username: {
+      OR: [
+        {
+          id: {
             contains: search,
             mode: "insensitive",
           },
         },
-      },
-      include: {
-        user: { select: { id: true, username: true, email: true } },
-        order_items: {
-          include: {
-            book: { select: { id: true, title: true, price: true } },
+        {
+          user: {
+            username: {
+              contains: search,
+              mode: "insensitive",
+            },
           },
         },
+      ],
+    },
+    include: {
+      user: { select: { id: true, username: true, email: true } },
+      order_items: {
+        include: {
+          book: { select: { id: true, title: true, price: true } },
+        },
       },
-      orderBy: [{ id: orderById }],
-    });
+    },
+    orderBy: [{ id: orderById }],
+  });
+
 
     // Hitung total amount & avg price per transaksi
     const transactionsWithTotals = transactions.map((t) => {
