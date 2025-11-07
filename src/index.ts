@@ -19,6 +19,12 @@ dotenv.config();
 const app: Application = express();
 const PORT = process.env.PORT || 8080;
 
+
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,10 +33,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(authenticateUser);
 
-app.use(cors({
-  origin: "http://localhost:5173", // asal frontend
-  credentials: true               // jika pakai cookie / session
-}));
 
 // Test route
 app.get('/', (req: Request, res: Response) => {
