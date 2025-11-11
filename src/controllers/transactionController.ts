@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
+import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
@@ -110,9 +111,14 @@ export const getAllTransactions = async (req: Request, res: Response) => {
     if (!authHeader) {
       return res.status(401).json({
         success: false,
-        message: "Token tidak ditemukan.",
+        message: "Akses ditolak. Token tidak ditemukan.",
       });
     }
+
+    // Ambil token
+    const token = authHeader.split(" ")[1];
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+    const userId = decoded.id;
 
     // Ambil query param
     const page = Number(req.query.page) || 1;
@@ -124,41 +130,35 @@ export const getAllTransactions = async (req: Request, res: Response) => {
 
     const skip = (page - 1) * limit;
 
-    // Ambil data dari database
+    // Ambil data dari database HANYA untuk user yang login
     const transactions = await prisma.orders.findMany({
       skip,
       take: limit,
       where: {
-      OR: [
-        {
-          id: {
-            contains: search,
-            mode: "insensitive",
+        user_id: userId, // filter transaksi milik user login
+        OR: [
+          {
+            id: { contains: search, mode: "insensitive" },
           },
-        },
-        {
-          user: {
-            username: {
-              contains: search,
-              mode: "insensitive",
+          {
+            user: {
+              username: { contains: search, mode: "insensitive" },
             },
           },
-        },
-      ],
-    },
-    include: {
-      user: { select: { id: true, username: true, email: true } },
-      order_items: {
-        include: {
-          book: { select: { id: true, title: true, price: true } },
+        ],
+      },
+      include: {
+        user: { select: { id: true, username: true, email: true } },
+        order_items: {
+          include: {
+            book: { select: { id: true, title: true, price: true } },
+          },
         },
       },
-    },
-    orderBy: [{ id: orderById }],
-  });
+      orderBy: [{ id: orderById }],
+    });
 
-
-    // Hitung total amount & avg price per transaksi
+    // Hitung total dan rata-rata
     const transactionsWithTotals = transactions.map((t) => {
       const totalAmount = t.order_items.reduce(
         (sum, item) => sum + item.quantity * item.book.price,
@@ -173,7 +173,7 @@ export const getAllTransactions = async (req: Request, res: Response) => {
       return { ...t, totalAmount, avgPrice };
     });
 
-    // Sorting manual berdasarkan amount / price
+    // Sorting manual
     if (orderByAmount) {
       transactionsWithTotals.sort((a, b) =>
         orderByAmount === "asc"
@@ -188,7 +188,7 @@ export const getAllTransactions = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      message: "All transactions retrieved successfully",
+      message: "Transaksi user berhasil diambil",
       data: transactionsWithTotals,
     });
   } catch (error: any) {
