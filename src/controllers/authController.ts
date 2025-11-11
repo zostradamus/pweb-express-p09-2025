@@ -62,6 +62,7 @@ export const register = async (req: Request, res: Response) => {
 
 
 // login
+// login
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -83,7 +84,7 @@ export const login = async (req: Request, res: Response) => {
         message: "Email atau password salah.",
       });
     }
-    
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({
@@ -97,15 +98,17 @@ export const login = async (req: Request, res: Response) => {
       expiresIn: "1h",
     });
 
+    // ⬇️ Kirim juga data user ke frontend
     return res.status(200).json({
       success: true,
       message: "Login berhasil.",
       data: {
-        // id: user.id,
-        // username: user.username,
-        // email: user.email,
-        // created_at: user.created_at,
         token,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
       },
     });
   } catch (error: any) {
@@ -115,7 +118,8 @@ export const login = async (req: Request, res: Response) => {
       message: "Terjadi kesalahan server.",
     });
   }
-}
+};
+
 
 
 // get current user
